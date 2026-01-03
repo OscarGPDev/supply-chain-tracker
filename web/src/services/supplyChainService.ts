@@ -1,3 +1,4 @@
+"use client"
 import { ethers } from "ethers";
 import SupplyChainABI from "../abi/SupplyChain.json";
 
@@ -31,7 +32,9 @@ export const getSignerContract = async () => {
   const provider = getEthersProvider();
   if (!provider) throw new Error("MetaMask is not installed!");
   const signer = await provider.getSigner();
-  return new ethers.Contract(contractAddress, SupplyChainABI.abi, signer);
+  console.log("getsignercontract",contractAddress, SupplyChainABI.abi, signer)
+  const contract = new ethers.Contract(contractAddress, SupplyChainABI.abi, signer);
+  return contract
 };
 
 // For your enums, it's useful to have a mapping
@@ -44,3 +47,10 @@ export const ActorRoles: { [key: number]: string } = {
   5: "Inspector",
 };
 
+export interface Actor {
+  actorAddress: string;
+  name: string;
+  role: number | bigint;
+  location: string;
+  isActive: boolean;
+}

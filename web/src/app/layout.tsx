@@ -1,13 +1,14 @@
+import Header from "@/app/components/Header";
+import { Web3Provider } from "@/context/Web3Context";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { Web3Provider } from "@/context/Web3Context";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Supply Chain dApp",
-  description: "A decentralized supply chain tracking application.",
+  title: "Supply Chain Tracker",
+  description: "Blockchain based supply chain tracking",
 };
 
 export default function RootLayout({
@@ -18,9 +19,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Web3Provider>{children}</Web3Provider>
+        <Web3Provider>
+          <Header />
+          {children}
+        </Web3Provider>
       </body>
     </html>
   );
 }
-

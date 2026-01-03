@@ -105,7 +105,8 @@ contract SupplyChain {
 
     // Gestión de Actores
     function registerActor(address _actorAddress,string memory _name, ActorRole _role, string memory _location) public onlyAdmin {
-        require(actors[msg.sender].actorAddress == address(0), "Actor already registered");
+
+        require(actors[_actorAddress].actorAddress == address(0), "Actor already registered");
 
         actors[_actorAddress] = Actor({
             actorAddress: _actorAddress,

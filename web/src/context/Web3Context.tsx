@@ -7,15 +7,7 @@ import {
   useContext,
   ReactNode,
 } from "react";
-import { getContract } from "../services/supplyChainService";
-
-interface Actor {
-  address: string;
-  name: string;
-  role: number;
-  location: string;
-  isActive: boolean;
-}
+import { getSignerContract, Actor } from "../services/supplyChainService";
 
 interface Web3ContextType {
   account: string | null;
@@ -50,18 +42,19 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
     const fetchActorData = async () => {
       if (!account) return;
       try {
-        const contract = getContract();
+        const contract = await getSignerContract();
         if (!contract) return;
-
-        const actorData = await contract.getActor(account);
-        const adminAddress = await contract.admin();
-
+        console.log("getActor",contract)
+        const actorData = await contract.getActor();
+        console.log("getActorData",actorData)
+        const isAdmin = await contract.isAdmin();
+        console.log("isAdmin",isAdmin)
         if (
           actorData.actorAddress !== "0x0000000000000000000000000000000000000000" &&
           actorData.isActive
         ) {
           setActor({
-            address: actorData.actorAddress,
+            actorAddress: actorData.actorAddress,
             name: actorData.name,
             role: Number(actorData.role),
             location: actorData.location,
@@ -71,7 +64,7 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
           setActor(null);
         }
 
-        setIsAdmin(account.toLowerCase() === adminAddress.toLowerCase());
+        setIsAdmin(isAdmin);
       } catch (error) {
         console.error("Failed to fetch actor data:", error);
         setActor(null);
